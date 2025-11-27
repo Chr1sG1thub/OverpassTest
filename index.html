@@ -2,20 +2,30 @@
   <head>
     <script>
       async function getData() {
-      let qy = '[out:json][timeout:25];(node["amenity"="cafe"](42.310099, 1.721397, 43.055034, 3.304637););out geom';
-      // The Overpass API expects the query string directly, not as 'data=...'
-      // Do NOT encode the entire query string with encodeURIComponent for the POST body.
-      // qy = encodeURIComponent(qy); // Remove this line
+      let qy = '[out:json][timeout:25];(node["amenity"="cafe"](42.310099, 1.721397, 43.055034, 3.304637););out geom;';
+      // The Overpass API expects the query string as 'data=<url_encoded_query>' in the POST body.
+      // The entire 'data=' string also needs to be URL-encoded for the body.
+      let postBody = 'data=' + encodeURIComponent(qy); // Correctly format the POST body
 
 var uri = "https://overpass-api.de/api/interpreter";
 
 var result = await fetch(uri, {
   method:'POST',
-  // Ensure the Content-Type header is correctly set to 'application/x-www-form-urlencoded'
-  // or 'text/plain' if not explicitly handled by fetch with a plain string body.
-  // When 'body' is a string, fetch automatically sets 'Content-Type: text/plain;charset=UTF-8'.
-  body:qy
-}).then(data => {console.log(data)});
+  // Explicitly set Content-Type for 'application/x-www-form-urlencoded'
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded'
+  },
+  body: postBody // Use the correctly formatted body
+}).then(data => {
+  if (!data.ok) { // Check if the response was successful
+    throw new Error(`HTTP error! status: ${data.status}`);
+  }
+  return data.text(); // Or data.json() if you expect JSON back
+}).then(text => {
+  console.log("Success:", text);
+}).catch(error => {
+  console.error("Error fetching data:", error);
+});
       }
       
       getData();
