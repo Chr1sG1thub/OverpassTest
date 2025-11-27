@@ -1,12 +1,15 @@
 <html>
   <head>
     <script>
+      async function getData() {
       let qy = '[out:json][timeout:25];(node["amenity"="cafe"](42.310099, 1.721397, 43.055034, 3.304637););out geom';
       qy = "data="+encodeURIComponent(qy);
 
 var uri = "https://overpass-api.de/api/interpreter";
 
 var result = await fetch(uri, {method:'POST', body:qy}).then(data => {console.log(data)});
+      }
+      getData();
 
     </script>    
   </head>
