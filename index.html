@@ -1,9 +1,7 @@
 <html>
   <head>
     <script>
-      let qy = '[out:json][timeout:25];(
-      node["amenity"="cafe"](42.310099, 1.721397, 43.055034, 3.304637););
-      out meta';
+      let qy = '[out:json][timeout:25];(node["amenity"="cafe"](42.310099, 1.721397, 43.055034, 3.304637););out meta';
       qy = "data="+encodeURIComponent(qy);
 
       var data = new FormData()
