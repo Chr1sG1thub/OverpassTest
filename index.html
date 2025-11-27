@@ -4,11 +4,18 @@
       async function getData() {
       let qy = '[out:json][timeout:25];(node["amenity"="cafe"](42.310099, 1.721397, 43.055034, 3.304637););out geom';
       // The Overpass API expects the query string directly, not as 'data=...'
-      qy = encodeURIComponent(qy); // Only encode the query itself
+      // Do NOT encode the entire query string with encodeURIComponent for the POST body.
+      // qy = encodeURIComponent(qy); // Remove this line
 
 var uri = "https://overpass-api.de/api/interpreter";
 
-var result = await fetch(uri, {method:'POST', body:qy}).then(data => {console.log(data)});
+var result = await fetch(uri, {
+  method:'POST',
+  // Ensure the Content-Type header is correctly set to 'application/x-www-form-urlencoded'
+  // or 'text/plain' if not explicitly handled by fetch with a plain string body.
+  // When 'body' is a string, fetch automatically sets 'Content-Type: text/plain;charset=UTF-8'.
+  body:qy
+}).then(data => {console.log(data)});
       }
       
       getData();
@@ -18,4 +25,3 @@ var result = await fetch(uri, {method:'POST', body:qy}).then(data => {console.lo
   <body>
   </body>
 </html>
-
