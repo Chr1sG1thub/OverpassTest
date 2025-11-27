@@ -20,7 +20,7 @@ var result = await fetch(uri, {
   if (!data.ok) { // Check if the response was successful
     throw new Error(`HTTP error! status: ${data.status}`);
   }
-  return data.text(); // Or data.json() if you expect JSON back
+  return data.json();
 }).then(text => {
   console.log("Success:", text);
 }).catch(error => {
